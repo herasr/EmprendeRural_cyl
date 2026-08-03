@@ -147,13 +147,13 @@ export const MethodologyModal: React.FC<MethodologyModalProps> = ({ isOpen, onCl
           </section>
 
           {/* Sourcing / References */}
-          <section className="bg-slate-50 p-4 rounded-xl text-xs space-y-1">
-            <h4 className="font-semibold text-slate-800 mb-1 flex items-center gap-1">
+          <section className="bg-slate-50 p-4 rounded-xl text-xs space-y-2.5">
+            <h4 className="font-semibold text-slate-800 flex items-center gap-1">
               <HelpCircle className="h-3.5 w-3.5 text-slate-500" />
               Fuentes de Datos Oficiales y Reutilización
             </h4>
             <p className="text-slate-600 leading-normal">
-              Todos los datos subyacentes provienen de datasets abiertos publicados por organismos oficiales:
+              <strong>Procedencia de los datos:</strong> Portal de Datos Abiertos de la Junta de Castilla y León y otras fuentes públicas identificadas en cada ficha. La mención de los organismos productores no implica su participación, respaldo o validación del análisis realizado por EmprendeRural CyL.
             </p>
             <ul className="list-disc pl-5 mt-1 text-slate-500 space-y-0.5">
               <li><strong>Censo e Indicadores Demográficos:</strong> Instituto Nacional de Estadística (INE) e Indicadores Demográficos del SIE (Junta de Castilla y León).</li>
@@ -163,13 +163,16 @@ export const MethodologyModal: React.FC<MethodologyModalProps> = ({ isOpen, onCl
             </ul>
           </section>
 
-          {/* Disclaimers Page 17 */}
-          <section className="bg-amber-50 rounded-xl p-4 border border-amber-200">
-            <h5 className="font-semibold text-amber-800 flex items-center gap-1.5 mb-1 text-xs">
-              <ShieldAlert className="h-4 w-4 text-amber-600" />
-              Descargo de Responsabilidad Normativo
+          {/* Institutional Independence Notice & Disclaimer */}
+          <section className="bg-amber-50 rounded-xl p-4 border border-amber-200 space-y-2">
+            <h5 className="font-semibold text-amber-900 flex items-center gap-1.5 text-xs">
+              <ShieldAlert className="h-4 w-4 text-amber-700 shrink-0" />
+              Aviso de Independencia Institucional y Descargo de Responsabilidad
             </h5>
-            <p className="text-xxs text-amber-900 leading-normal">
+            <p className="text-xs text-amber-900 font-medium leading-relaxed bg-amber-100/60 p-2.5 rounded-lg border border-amber-200">
+              <strong>EmprendeRural CyL es una herramienta independiente basada en datos abiertos.</strong> Utiliza conjuntos publicados por la Junta de Castilla y León y otras fuentes públicas, pero no es un servicio oficial de la Administración autonómica ni sus resultados representan un pronunciamiento de esta.
+            </p>
+            <p className="text-[11px] text-amber-800 leading-normal">
               Esta plataforma es de carácter estrictamente informativo y orientativo. No garantiza rentabilidad comercial ni sustituye el asesoramiento legal, financiero, arquitectónico o normativo especializado. El emprendedor asume bajo su propio riesgo el estudio final de viabilidad en el terreno.
             </p>
           </section>

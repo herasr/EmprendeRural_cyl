@@ -781,6 +781,18 @@ export default function App() {
 
         </div>
 
+        {/* Notice of Institutional Independence */}
+        <div className="bg-[#111827] border-t border-slate-800/80 py-4 px-4 sm:px-6 lg:px-8 text-center text-xs text-slate-300">
+          <div className="max-w-5xl mx-auto space-y-1">
+            <p className="text-slate-200 font-medium">
+              <strong>EmprendeRural CyL</strong> es una herramienta independiente basada en datos abiertos. Utiliza conjuntos publicados por la Junta de Castilla y León y otras fuentes públicas, pero no es un servicio oficial de la Administración autonómica ni sus resultados representan un pronunciamiento de esta.
+            </p>
+            <p className="text-[11px] text-slate-400">
+              <strong>Procedencia de los datos:</strong> Portal de Datos Abiertos de la Junta de Castilla y León y otras fuentes públicas identificadas en la plataforma. La mención de los organismos productores no implica su participación, respaldo o validación del análisis realizado.
+            </p>
+          </div>
+        </div>
+
         {/* Legal links, micro-capsules and certification badges (Page 4 of PDF) */}
         <div className="bg-[#0f172a] border-t border-slate-900 py-6 text-slate-450 border-b border-indigo-950/20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4 text-[11px]">
