@@ -13,7 +13,7 @@ const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
   httpOptions: {
     headers: {
-      "User-Agent": "aistudio-build",
+      "User-Agent": "emprenderural-cyl",
     },
   },
 });
@@ -41,8 +41,8 @@ async function startServer() {
       const prompt = `
 Eres un analista técnico sénior y consultor de la red de Agentes de Desarrollo Local y Cárceles de Empresas rurales de Castilla y León. Tu función es elaborar un dictamen técnico riguroso, realista y estrictamente objetivo sobre la viabilidad del proyecto comercial propuesto.
 
-CRÍTICO - EVITAR ESTEREOTIPOS DE IA:
-- NO des saludos amistosos ni introducciones como "¡Hola!", "Espero que este informe te sirva", o "Como inteligencia artificial...".
+CRÍTICO - ESTILO FORMAL Y TÉCNICO:
+- NO des saludos ni introducciones informales como "¡Hola!" o "Espero que este informe te sirva".
 - NO uses adjetivos vacíos de marketing ("maravilloso", "revolucionario", "fascinante", "el éxito está garantizado"). Sin tono de autoayuda o entusiasmo impostado.
 - Redacta de forma directa, analítica y técnica (empleando vocabulario administrativo y económico común en informes de viabilidad municipales, similar al de un técnico de la Junta de Castilla y León o de una Cámara de Comercio).
 - El informe DEBE iniciar directamente con el título de la sección, sin explicaciones previas ni preámbulos robóticos.
@@ -118,8 +118,8 @@ Indica subvenciones autonómicas reales o consorcios de desarrollo (ej. LEADER, 
 
       res.json({ text: response.text });
     } catch (error: any) {
-      console.error("Gemini Error:", error);
-      res.status(500).json({ error: "Error interno al comunicarse con el motor consultor de Gemini." });
+      console.error("Processing Error:", error);
+      res.status(500).json({ error: "Error interno al comunicarse con el servicio de procesamiento." });
     }
   });
 
