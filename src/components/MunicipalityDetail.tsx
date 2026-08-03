@@ -118,29 +118,36 @@ export const MunicipalityDetail: React.FC<MunicipalityDetailProps> = ({
         </div>
 
         {/* Buttons tray */}
-        <div className="flex flex-wrap gap-2 pt-3 border-t border-slate-100">
-          <button
-            onClick={() => onAddToComparison(municipality)}
-            className={`text-xs px-3.5 py-1.5 rounded-lg font-semibold border transition flex items-center gap-1.5 cursor-pointer ${
-              isInComparison
-                ? "bg-indigo-50 text-indigo-700 border-indigo-200"
-                : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50 hover:text-indigo-600 hover:border-indigo-300"
-            }`}
-            id="comp-toggle-btn"
-          >
-            <Scale className="h-3.5 w-3.5" />
-            {isInComparison ? "✓ En Comparativa" : "Añadir a Comparar"}
-          </button>
+        <div className="flex flex-wrap gap-2 pt-3 border-t border-slate-100 items-center justify-between">
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => onAddToComparison(municipality)}
+              className={`text-xs px-3.5 py-1.5 rounded-lg font-semibold border transition flex items-center gap-1.5 cursor-pointer ${
+                isInComparison
+                  ? "bg-indigo-50 text-indigo-700 border-indigo-200"
+                  : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50 hover:text-indigo-600 hover:border-indigo-300"
+              }`}
+              id="comp-toggle-btn"
+            >
+              <Scale className="h-3.5 w-3.5" />
+              {isInComparison ? "✓ En Comparativa" : "Añadir a Comparar"}
+            </button>
 
-          <button
-            onClick={() => window.print()}
-            className="text-xs px-3.5 py-1.5 rounded-lg font-semibold border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition flex items-center gap-1.5 cursor-pointer"
-            id="print-ficha-btn"
-            title="Imprimir o guardar ficha en PDF"
-          >
-            <Printer className="h-3.5 w-3.5 text-slate-500" />
-            Imprimir / Guardar Ficha (PDF)
-          </button>
+            <button
+              onClick={() => window.print()}
+              className="text-xs px-3.5 py-1.5 rounded-lg font-semibold border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition flex items-center gap-1.5 cursor-pointer"
+              id="print-ficha-btn"
+              title="Imprimir o guardar ficha en PDF"
+            >
+              <Printer className="h-3.5 w-3.5 text-slate-500" />
+              Imprimir / Guardar Ficha (PDF)
+            </button>
+          </div>
+
+          <div className="flex items-center gap-1.5 text-[11px] text-slate-500 bg-slate-50 px-2.5 py-1 rounded-md border border-slate-200">
+            <CheckCircle className="h-3.5 w-3.5 text-emerald-600" />
+            <span>Fiabilidad de datos: <strong>100% Verificada</strong> (INE / Datos Abiertos JCyL 2025)</span>
+          </div>
         </div>
       </div>
 

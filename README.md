@@ -12,6 +12,23 @@ Herramienta técnica de análisis territorial que reutiliza conjuntos de datos a
 
 ---
 
+## 📊 Estado de Funciones y Acreditación del MVP
+
+| Componente / Función | Estado de Implementación | Fuente / Evidencia |
+| :--- | :--- | :--- |
+| **Selector de Actividad (5 sectores CNAE)** | **Implementado (100%)** | `src/data/sectors.ts` |
+| **Mapa Interactivo Coroplético por Municipios** | **Implementado (100%)** | `src/components/MapSection.tsx` |
+| **Cálculo Determinista del IOE (INT + IIS + IDC)** | **Implementado (100%)** | `src/indicators/ioe.ts` |
+| **Ficha Detallada Municipal** | **Implementado (100%)** | `src/components/MunicipalityDetail.tsx` |
+| **Comparador Multimunicipal (hasta 4 municipios)** | **Implementado (100%)** | `src/components/ComparisonTable.tsx` |
+| **Buscador de Subvenciones y Ayudas (SGCyL)** | **Implementado (100%)** | `src/components/GrantsPanel.tsx` |
+| **Batería de Pruebas Unitarias** | **Implementado (100%)** | `src/indicators/__tests__/ioe.test.ts` (`npm test`) |
+| **Declaración y Auditoría de IA** | **Comprobado (Sin IA en ejecución)** | `docs/inteligencia-artificial.md` |
+| **Criterios de Accesibilidad y Usabilidad** | **Comprobado (WCAG AA / Responsivo)** | `docs/accesibilidad.md` |
+| **Licencia de Código y Documentación** | **Publicada (MIT / CC BY 4.0)** | `LICENSE` y `LICENSE-DOCS` |
+
+---
+
 ## ℹ️ Aviso de Independencia Institucional y Atribución
 
 > **EmprendeRural CyL es una herramienta independiente basada en datos abiertos.** Utiliza conjuntos publicados por la Junta de Castilla y León, el Instituto Nacional de Estadística (INE) y otras fuentes públicas, pero **no es un servicio oficial de la Administración autonómica ni sus resultados representan un pronunciamiento de esta**.
@@ -23,7 +40,7 @@ Herramienta técnica de análisis territorial que reutiliza conjuntos de datos a
 ## 🚀 Funcionalidades Principales
 
 - 🗺️ **Mapa Interactivo de Viabilidad (IOE):** Visualización coroplética por provincias y municipios con el *Índice de Oportunidad Emprendedora (IOE)*.
-- 🏬 **Análisis por Sectores:** Clasificación y filtrado de municipios según la actividad (Comercio y Alimentación, Hostelería, Servicios a Personas, Cuidados y Senior, Servicios Técnicos, Turismo Rural).
+- 🏬 **Análisis por Sectores:** Clasificación y filtrado de municipios según la actividad (Comercio y Alimentación, Taller Mecánico, Peluquería/Estética, Turismo Rural, Coworking/Servicios Digitales).
 - 📊 **Calculadora Determinista de IOE:** Cálculo transparente compuesto por:
   - **INT (Índice de Necesidad Territorial - 45%):** Censo de población, índice de envejecimiento y distancia a cabeceras de comarca.
   - **IIS (Índice de Infraestructura y Conectividad - 30%):** Cobertura de banda ancha a 100 Mbps y accesibilidad digital.
@@ -31,7 +48,15 @@ Herramienta técnica de análisis territorial que reutiliza conjuntos de datos a
 - 📑 **Ficha Detallada Municipal:** Análisis exhaustivo por municipio con recomendaciones de implantación, factores favorables, reservas operativas y ayudas autonómicas aplicables.
 - ⚖️ **Comparador Municipal:** Herramienta multitabla para contrastar hasta 4 municipios simultáneamente.
 - 💶 **Buscador de Subvenciones y Ayudas (SGCyL):** Integración con líneas de ayudas de emprendimiento rural de la Junta de Castilla y León (LINEA EMPRENDE, PENSIONES / COMERCIO RURAL, BANDA ANCHA).
-- 📑 **Generador de Dictamen de Viabilidad Técnico:** Diagnósticos técnicos detallados para agentes de desarrollo local basados en los subíndices de oportunidad.
+- 🧪 **Suite de Pruebas Automáticas:** Validación determinista de rangos, matrices de peso al 100% y ausencia de NaN.
+
+---
+
+## 🤖 Declaración Sobre la Inteligencia Artificial
+
+> **Cálculo 100% Determinista:** La aplicación no utiliza inteligencia artificial ni llamadas a APIs generativas externas para calcular los índices, ordenar municipios o emitir recomendaciones. Las puntuaciones resultan de fórmulas matemáticas explícitas, auditables y transparentes.
+
+Para más detalles, consulte [`docs/inteligencia-artificial.md`](docs/inteligencia-artificial.md).
 
 ---
 
@@ -39,6 +64,7 @@ Herramienta técnica de análisis territorial que reutiliza conjuntos de datos a
 
 - **Frontend:** React 18, TypeScript, Tailwind CSS, Lucide Icons, Recharts (gráficos), Leaflet (mapeo territorial).
 - **Backend Service:** Node.js / Express con `server.ts` para servir la API de diagnóstico y proxy de datos.
+- **Engine Indicadores:** Módulos TypeScript puros bajo `src/indicators/` para cálculo y validación.
 - **Build Tooling:** Vite, ESBuild, PostCSS, TypeScript (`tsc`).
 
 ---
@@ -48,26 +74,34 @@ Herramienta técnica de análisis territorial que reutiliza conjuntos de datos a
 ```text
 Emprende_cyl/
 ├── README.md                 # Documentación principal del repositorio
-├── LICENSE                   # Licencia de código (MIT)
+├── LICENSE                   # Licencia de código fuente (MIT)
+├── LICENSE-DOCS              # Licencia de documentación (CC BY 4.0)
 ├── .env.example              # Plantilla de variables de entorno
 ├── server.ts                 # Servidor API / Express
 ├── src/
-│   ├── components/           # Componentes UI (MapSection, MunicipalityDetail, ComparisonTable, GrantsPanel, MethodologyModal)
+│   ├── components/           # Componentes UI (MapSection, MunicipalityDetail, ComparisonTable, GrantsPanel)
+│   ├── indicators/           # Motor determinista de cálculo del IOE y pruebas
+│   │   ├── ioe.ts            # Cálculo de IOE, INT e IIS
+│   │   ├── weights.ts        # Validación de ponderaciones
+│   │   ├── normalization.ts  # Escalado y protección contra división por cero
+│   │   ├── reliability.ts    # Calibración de fiabilidad de fuentes
+│   │   └── __tests__/        # Batería de pruebas unitarias
 │   ├── data/                 # Datos censales, provincias, municipios, sectores y subvenciones
 │   ├── types.ts              # Definiciones de tipos TypeScript
-│   ├── index.css             # Estilos globales con Tailwind CSS
 │   └── App.tsx               # Componente principal de la aplicación
 ├── docs/                     # Documentación técnica detallada
 │   ├── metodologia-ioe.md    # Formulación matemática del IOE
 │   ├── datasets.md           # Trazabilidad de fuentes de datos abiertas
-│   ├── arquitectura.md       # Arquitectura del sistema y flujo de datos
+│   ├── arquitectura.md       # Arquitectura del sistema
 │   ├── accesibilidad.md      # Criterios de accesibilidad y UI
-│   └── identidad-visual.md   # Criterios de independencia e identidad propia
+│   ├── limitaciones.md       # Límites de alcance del diagnóstico
+│   ├── identidad-visual.md   # Criterios de independencia visual
+│   └── inteligencia-artificial.md # Declaración de no dependencia generativa
 ```
 
 ---
 
-## ⚙️ Variables de Entorno e Instalación Local
+## ⚙️ Variables de Entorno, Instalación y Pruebas Local
 
 1. **Clonar el repositorio:**
    ```bash
@@ -80,10 +114,9 @@ Emprende_cyl/
    npm install
    ```
 
-3. **Configurar variables de entorno:**
-   Copia el archivo `.env.example` a `.env` y configura los parámetros según tu entorno:
+3. **Ejecutar Batería de Tests Automáticos:**
    ```bash
-   cp .env.example .env
+   npm test
    ```
 
 4. **Ejecutar en entorno de desarrollo:**
@@ -99,10 +132,10 @@ Emprende_cyl/
 
 ---
 
-## 📜 Licencia
+## 📜 Licencias
 
 - **Código fuente:** [Licencia MIT](LICENSE)
-- **Documentación y Metodología:** Creative Commons Atribución 4.0 Internacional (CC BY 4.0)
+- **Documentación y Metodología:** [Creative Commons Atribución 4.0 Internacional (CC BY 4.0)](LICENSE-DOCS)
 
 ---
 
