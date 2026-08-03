@@ -13,7 +13,7 @@
        ▼
 [ Servidor API (Node.js + Express en server.ts) ]
        │
-       ├── Endpoint /api/diagnostico-viabilidad (Generación de dictamen asistido)
+       ├── Servidor estático de alta disponibilidad
        └── Proxy seguro y gestión de cabeceras de producción
 ```
 

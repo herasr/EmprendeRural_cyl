@@ -31,7 +31,7 @@ Herramienta técnica de análisis territorial que reutiliza conjuntos de datos a
 - 📑 **Ficha Detallada Municipal:** Análisis exhaustivo por municipio con recomendaciones de implantación, factores favorables, reservas operativas y ayudas autonómicas aplicables.
 - ⚖️ **Comparador Municipal:** Herramienta multitabla para contrastar hasta 4 municipios simultáneamente.
 - 💶 **Buscador de Subvenciones y Ayudas (SGCyL):** Integración con líneas de ayudas de emprendimiento rural de la Junta de Castilla y León (LINEA EMPRENDE, PENSIONES / COMERCIO RURAL, BANDA ANCHA).
-- 📑 **Generador de Dictamen de Viabilidad Técnico:** Generación asistida de diagnósticos detallados para agentes de desarrollo local.
+- 📑 **Generador de Dictamen de Viabilidad Técnico:** Diagnósticos técnicos detallados para agentes de desarrollo local basados en los subíndices de oportunidad.
 
 ---
 
