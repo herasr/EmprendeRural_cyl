@@ -1,0 +1,6 @@
+{
+  "name": "EmprendeRural CyL",
+  "description": "El radar de oportunidades de negocio para emprendedores rurales en Castilla y León sustentado en datos de censo y telecomunicaciones",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
