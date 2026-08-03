@@ -1,7 +1,7 @@
 import React from "react";
 import { Municipality, Sector } from "../types";
 import { calculateIOE } from "../utils/calculations";
-import { Scale, Trash2, GitCompare } from "lucide-react";
+import { Scale, Trash2, GitCompare, Download } from "lucide-react";
 
 interface ComparisonTableProps {
   comparisonList: Municipality[];
@@ -20,6 +20,31 @@ export const ComparisonTable: React.FC<ComparisonTableProps> = ({
   allMunicipalities,
   onSelectMunicipality
 }) => {
+  const exportCSV = () => {
+    if (comparisonList.length === 0) return;
+    const headers = ["Indicador", ...comparisonList.map(m => `"${m.name} (${m.province})"`)] ;
+    const rows = [
+      ["Población", ...comparisonList.map(m => m.population)],
+      ["Edad Media", ...comparisonList.map(m => m.avgAge)],
+      ["Población >65 (%)", ...comparisonList.map(m => m.age65PlusPct)],
+      ["Distancia a Cabecera (km)", ...comparisonList.map(m => m.distanceToCapital)],
+      ["Conectividad (Mbps)", ...comparisonList.map(m => m.connectivitySpeed)],
+      ["Negocios Activos", ...comparisonList.map(m => m.activeBusinesses[selectedSector.id] || 0)],
+      ["Índice IOE (0-100)", ...comparisonList.map(m => calculateIOE(m, selectedSector, allMunicipalities).score)],
+    ];
+
+    const csvContent = "data:text/csv;charset=utf-8," + 
+      [headers.join(","), ...rows.map(r => r.join(","))].join("\n");
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `comparativa_rural_${selectedSector.id}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   if (comparisonList.length === 0) {
     return (
       <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm text-center py-12 space-y-3">
@@ -34,7 +59,7 @@ export const ComparisonTable: React.FC<ComparisonTableProps> = ({
 
   return (
     <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4 overflow-hidden font-sans">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-wrap justify-between items-center gap-3">
         <div>
           <h3 className="font-semibold text-slate-800 text-lg flex items-center gap-2">
             <Scale className="h-5 w-5 text-[#8c1d40]" />
@@ -44,13 +69,23 @@ export const ComparisonTable: React.FC<ComparisonTableProps> = ({
             Contraste de indicadores, demografía y señales de oportunidad para <strong>{selectedSector.name}</strong>.
           </p>
         </div>
-        <button
-          onClick={onClearComparison}
-          className="text-xs text-red-600 bg-red-50/50 hover:bg-red-50 font-semibold px-3 py-1.5 rounded-lg border border-red-200 transition cursor-pointer"
-          id="clear-comparison-btn"
-        >
-          Limpiar Todo
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={exportCSV}
+            className="text-xs text-slate-700 bg-slate-100 hover:bg-slate-200 font-bold px-3 py-1.5 rounded-lg border border-slate-300 transition cursor-pointer flex items-center gap-1.5"
+            id="export-csv-btn"
+          >
+            <Download className="h-3.5 w-3.5 text-slate-600" />
+            Exportar CSV
+          </button>
+          <button
+            onClick={onClearComparison}
+            className="text-xs text-red-600 bg-red-50/50 hover:bg-red-50 font-semibold px-3 py-1.5 rounded-lg border border-red-200 transition cursor-pointer"
+            id="clear-comparison-btn"
+          >
+            Limpiar Todo
+          </button>
+        </div>
       </div>
 
       <div className="overflow-x-auto rounded-xl border border-slate-200 shadow-2xs">

@@ -17,7 +17,8 @@ import {
   FileText,
   Compass,
   CheckCircle,
-  Scale
+  Scale,
+  Printer
 } from "lucide-react";
 
 interface MunicipalityDetailProps {
@@ -200,6 +201,16 @@ export const MunicipalityDetail: React.FC<MunicipalityDetailProps> = ({
           >
             <Scale className="h-3.5 w-3.5" />
             {isInComparison ? "✓ En Comparativa" : "Añadir a Comparar"}
+          </button>
+
+          <button
+            onClick={() => window.print()}
+            className="text-xs px-3.5 py-1.5 rounded-lg font-semibold border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition flex items-center gap-1.5 cursor-pointer"
+            id="print-ficha-btn"
+            title="Imprimir o guardar ficha en PDF"
+          >
+            <Printer className="h-3.5 w-3.5 text-slate-500" />
+            Imprimir / Guardar Ficha (PDF)
           </button>
         </div>
       </div>

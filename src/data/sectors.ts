@@ -8,14 +8,14 @@ export const SECTORS: Sector[] = [
     iconName: "Bread",
     selectedAgeGroupLabel: "Población general (Todas las edades)",
     weights: {
-      v1_demanda: 0.20,     // Mayor población incrementa demanda de pan
-      v2_deficit: 0.25,     // Ausencia de panadería es determinante
-      v3_competencia: 0.20, // Proximidad de competidores es crítica (canibalización)
-      v4_demografia: 0.10,  // Evolución demográfica (estabilización)
-      v5_poblacion_obj: 0.15,// Población general
-      v6_conectividad: 0.00,// Irrelevante para panadería tradicional física
-      v7_ayudas: 0.05,      // Factor de apoyo complementario
-      v8_turismo: 0.05       // Turismo aporta consumo estacional
+      v1_demanda: 0.20,     // 20%
+      v2_deficit: 0.25,     // 25%
+      v3_competencia: 0.20, // 20%
+      v4_demografia: 0.10,  // 10%
+      v5_poblacion_obj: 0.15,// 15%
+      v6_conectividad: 0.00,// 0%
+      v7_ayudas: 0.05,      // 5%
+      v8_turismo: 0.05       // 5%
     }
   },
   {
@@ -25,14 +25,14 @@ export const SECTORS: Sector[] = [
     iconName: "Wrench",
     selectedAgeGroupLabel: "Población activa (Conductores y profesionales)",
     weights: {
-      v1_demanda: 0.25,
-      v2_deficit: 0.25,
-      v3_competencia: 0.15,
-      v4_demografia: 0.10,
-      v5_poblacion_obj: 0.15,
-      v6_conectividad: 0.00,
-      v7_ayudas: 0.05,
-      v8_turismo: 0.05
+      v1_demanda: 0.15,     // 15% (Memoria pág. 22)
+      v2_deficit: 0.20,     // 20%
+      v3_competencia: 0.25, // 25%
+      v4_demografia: 0.05,  // 5%
+      v5_poblacion_obj: 0.10,// 10%
+      v6_conectividad: 0.05,// 5%
+      v7_ayudas: 0.05,      // 5%
+      v8_turismo: 0.15       // 15% (Tráfico turístico)
     }
   },
   {
@@ -42,14 +42,14 @@ export const SECTORS: Sector[] = [
     iconName: "Scissors",
     selectedAgeGroupLabel: "Población Senior (>65 años)",
     weights: {
-      v1_demanda: 0.20,
-      v2_deficit: 0.25,
-      v3_competencia: 0.15,
-      v4_demografia: 0.10,
-      v5_poblacion_obj: 0.20, // 20% peso al tramo de edad clave (los mayores consumen mucha estética de proximidad)
-      v6_conectividad: 0.00,
-      v7_ayudas: 0.05,
-      v8_turismo: 0.05
+      v1_demanda: 0.20,     // 20% (Memoria pág. 23)
+      v2_deficit: 0.30,     // 30%
+      v3_competencia: 0.15, // 15%
+      v4_demografia: 0.05,  // 5%
+      v5_poblacion_obj: 0.25,// 25% (Foco en mayores de 65)
+      v6_conectividad: 0.00,// 0%
+      v7_ayudas: 0.05,      // 5%
+      v8_turismo: 0.00       // 0%
     }
   },
   {
@@ -59,14 +59,14 @@ export const SECTORS: Sector[] = [
     iconName: "Hotel",
     selectedAgeGroupLabel: "Entorno turístico y plazas",
     weights: {
-      v1_demanda: 0.10,      // Menos dependiente de residentes locales
-      v2_deficit: 0.10,      // Un déficit indica que hay espacio para nuevas experiencias
-      v3_competencia: 0.15,  // Oferta hotelera cercana
-      v4_demografia: 0.05,
-      v5_poblacion_obj: 0.05,
-      v6_conectividad: 0.15, // Muy importante wifi para turistas/teletrabajo
-      v7_ayudas: 0.10,       // Alto volumen de ayudas a rehabilitación rural
-      v8_turismo: 0.30       // Crítico: Entorno natural, cultural y plazas turísticas actuales
+      v1_demanda: 0.05,     // 5% (Memoria pág. 24)
+      v2_deficit: 0.15,     // 15%
+      v3_competencia: 0.15, // 15%
+      v4_demografia: 0.05,  // 5%
+      v5_poblacion_obj: 0.00,// 0%
+      v6_conectividad: 0.15,// 15% (Wifi para turistas/teletrabajo)
+      v7_ayudas: 0.15,      // 15% (Ayudas LEADER / rehabilitación)
+      v8_turismo: 0.30       // 30% (Factor más crítico: entorno turístico)
     }
   },
   {
@@ -76,14 +76,14 @@ export const SECTORS: Sector[] = [
     iconName: "Laptop",
     selectedAgeGroupLabel: "Población Activa y Jóvenes (25-55 años)",
     weights: {
-      v1_demanda: 0.10,
-      v2_deficit: 0.10,
-      v3_competencia: 0.10,
-      v4_demografia: 0.10,
-      v5_poblacion_obj: 0.20, // Peso a los rangos 25-55
-      v6_conectividad: 0.25, // Bandas anchas de velocidad óptimas (alta importancia!)
-      v7_ayudas: 0.10,       // Bonificaciones por digitalización y agenda digital
-      v8_turismo: 0.05
+      v1_demanda: 0.10,     // 10% (Memoria pág. 25)
+      v2_deficit: 0.20,     // 20%
+      v3_competencia: 0.10, // 10%
+      v4_demografia: 0.20,  // 20%
+      v5_poblacion_obj: 0.10,// 10% (Jóvenes y adultos 25-50 años)
+      v6_conectividad: 0.25,// 25% (Factor crítico: fibra / banda ancha)
+      v7_ayudas: 0.05,      // 5%
+      v8_turismo: 0.00       // 0%
     }
   }
 ];
