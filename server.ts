@@ -88,13 +88,33 @@ Propón una estrategia de diferenciación realista considerando los ${municipali
 Indica subvenciones autonómicas reales o consorcios de desarrollo (ej. LEADER, ayudas al autoempleo de la Junta / ECYL) viables para este perfil. Define un plan de acción pragmático de 3 tareas iniciales en el terreno físico para validar la iniciativa antes de incurrir en gastos de constitución.
 `;
 
-      const response = await ai.models.generateContent({
-        model: "gemini-3.5-flash",
-        contents: prompt,
-        config: {
-          temperature: 0.7,
-        },
-      });
+      let response;
+      const maxRetries = 3;
+      let lastError = null;
+
+      for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+          response = await ai.models.generateContent({
+            model: "gemini-3.6-flash",
+            contents: prompt,
+            config: {
+              temperature: 0.7,
+            },
+          });
+          break; // Success
+        } catch (err: any) {
+          lastError = err;
+          console.warn(`[Gemini API] Attempt ${attempt} failed:`, err?.message || err);
+          if (attempt < maxRetries) {
+            // Wait 1.5s * attempt before retrying
+            await new Promise((resolve) => setTimeout(resolve, 1500 * attempt));
+          }
+        }
+      }
+
+      if (!response) {
+        throw lastError || new Error("No response from Gemini model after retries.");
+      }
 
       res.json({ text: response.text });
     } catch (error: any) {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Municipality, Sector, IOEMetrics, Grant } from "../types";
 import { calculateIOE, calculateINT, calculateIIS, getCompatibleGrantsForTown } from "../utils/calculations";
 import {
@@ -12,9 +12,6 @@ import {
   Briefcase,
   AlertCircle,
   Coins,
-  Send,
-  Loader2,
-  FileText,
   Compass,
   CheckCircle,
   Scale,
@@ -36,78 +33,10 @@ export const MunicipalityDetail: React.FC<MunicipalityDetailProps> = ({
   onAddToComparison,
   isInComparison
 }) => {
-  const [userQuestion, setUserQuestion] = useState("");
-  const [consultantResponse, setConsultantResponse] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
-  // Progressive loading messages to keep user engaged
-  const [loadingStep, setLoadingStep] = useState(0);
-  const loadingMessages = [
-    "Consultando la base demográfica consolidada de Castilla y León...",
-    "Analizando el déficit comercial localizado y nivel de competencia local...",
-    "Cruzando convocatorias de subvenciones activas (fondos LEADER, ECYL)...",
-    "Compilando dictamen técnico de viabilidad y adaptaciones comerciales específicas..."
-  ];
-
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (isLoading) {
-      setLoadingStep(0);
-      interval = setInterval(() => {
-        setLoadingStep(prev => (prev < loadingMessages.length - 1 ? prev + 1 : prev));
-      }, 3500);
-    }
-    return () => clearInterval(interval);
-  }, [isLoading]);
-
-  // Reset consulting answer on town or sector change
-  useEffect(() => {
-    setConsultantResponse(null);
-    setUserQuestion("");
-    setErrorMsg(null);
-  }, [municipality, selectedSector]);
-
   const metrics: IOEMetrics = calculateIOE(municipality, selectedSector, allMunicipalities);
   const intMetrics = calculateINT(municipality, selectedSector, allMunicipalities);
   const iisMetrics = calculateIIS(municipality, selectedSector, allMunicipalities);
   const compatibleGrants: Grant[] = getCompatibleGrantsForTown(municipality, selectedSector.id);
-
-  const handleConsult = async () => {
-    setIsLoading(true);
-    setErrorMsg(null);
-    setConsultantResponse(null);
-
-    try {
-      const response = await fetch("/api/consultant", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          sector: selectedSector,
-          municipality,
-          metrics,
-          userQuestion: userQuestion.trim() || undefined
-        })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Algo salió mal al generar el dictamen técnico.");
-      }
-
-      setConsultantResponse(data.text);
-    } catch (err: any) {
-      console.error(err);
-      setErrorMsg(
-        err.message || "Error al conectar con la pasarela de análisis. Asegúrese de que la clave del motor de procesamiento esté correctamente configurada en el panel de control."
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   // Assign background styles according to IOE rating level
   let badgeBg = "bg-orange-50 text-orange-700 border-orange-200";
@@ -344,112 +273,6 @@ export const MunicipalityDetail: React.FC<MunicipalityDetailProps> = ({
               {cg.id === "g_plansoria" ? "Plan Soria Directo" : cg.title.substring(0, 16) + "..."}
             </span>
           ))}
-        </div>
-      </div>
-
-      {/* Simulador de Dictamen de Idoneidad de la Consejería */}
-      <div className="bg-slate-50 border-2 border-indigo-100/80 text-slate-800 rounded-2xl p-6 space-y-5 shadow-3xs relative overflow-hidden">
-        {/* Physical document watermark decor */}
-        <div className="absolute top-0 right-0 w-80 h-80 bg-indigo-500/5 rounded-full filter blur-3xl pointer-events-none"></div>
-
-        <div className="flex justify-between items-start gap-4">
-          <div className="space-y-1">
-            <span className="text-[10px] tracking-wider font-extrabold text-indigo-600 uppercase block font-mono">
-              Servicio de Apoyo al Emprendimiento y Desarrollo Local
-            </span>
-            <h3 className="text-lg font-black text-slate-900 uppercase tracking-tight flex items-center gap-2">
-              <FileText className="h-5 w-5 text-indigo-600" />
-              Dictamen de Viabilidad e Implantación
-            </h3>
-            <p className="text-xs text-slate-600 max-w-xl leading-relaxed">
-              Expida el dictamen técnico de viabilidad comercial y adaptación económica para <strong>{municipality.name}</strong> basándose en el censo actual de <strong>{selectedSector.name}</strong> (Índice de Oportunidad IOE: {metrics.score}/100).
-            </p>
-          </div>
-        </div>
-
-        {/* Core panel interface - Styled professionally like an administrative form wizard */}
-        <div className="space-y-4 pt-4 border-t border-slate-200">
-          {consultantResponse ? (
-            <div className="space-y-4 bg-white p-6 rounded-xl border border-slate-200 shadow-sm border-l-4 border-l-indigo-600 max-h-[450px] overflow-y-auto">
-              <div className="flex justify-between items-center pb-3 border-b border-slate-100">
-                <span className="text-[10px] font-black tracking-wider text-indigo-700 uppercase flex items-center gap-1.5 font-mono">
-                  <CheckCircle className="h-4 w-4 text-indigo-600" />
-                  Informe Técnico de Viabilidad y Campo Oficial - {municipality.name}
-                </span>
-                <button
-                  onClick={() => setConsultantResponse(null)}
-                  className="text-slate-500 hover:text-slate-800 text-xs font-bold cursor-pointer underline decoration-indigo-300 underline-offset-4"
-                >
-                  Nueva Evaluación
-                </button>
-              </div>
-              <div className="text-xs text-slate-705 leading-relaxed font-sans space-y-3">
-                {/* Visual rendering of the report with a clean paper document styling */}
-                {consultantResponse.split("\n").map((line, i) => {
-                  if (line.startsWith("### ")) {
-                    return <h4 key={i} className="text-[#8c1d40] font-black text-xs pt-2 pb-0.5 tracking-tight uppercase">{line.replace("### ", "")}</h4>;
-                  }
-                  if (line.startsWith("## ")) {
-                    return <h3 key={i} className="text-indigo-700 font-extrabold text-sm pt-4 pb-1 border-b border-slate-100 uppercase tracking-tight">{line.replace("## ", "")}</h3>;
-                  }
-                  if (line.startsWith("**")) {
-                    return <p key={i} className="mb-2 text-slate-800 font-semibold">{line.replace(/\*\*/g, "")}</p>;
-                  }
-                  if (line.trim().startsWith("- ")) {
-                    return <li key={i} className="ml-4 list-disc mb-1 text-slate-600 pl-1">{line.replace("- ", "")}</li>;
-                  }
-                  return <p key={i} className="mb-1 text-slate-650">{line}</p>;
-                })}
-              </div>
-            </div>
-          ) : isLoading ? (
-            <div className="flex flex-col items-center justify-center py-12 space-y-4">
-              <Loader2 className="h-10 w-10 text-indigo-600 animate-spin" />
-              <div className="text-center space-y-1">
-                <p className="text-xs font-extrabold text-slate-800">
-                  {loadingMessages[loadingStep]}
-                </p>
-                <p className="text-[10px] text-slate-400 animate-pulse font-mono uppercase tracking-widest">
-                  Evaluando variables y calculadores...
-                </p>
-              </div>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {/* Optional Custom Input Question */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700 block">
-                  Criterios adicionales de simulación u observaciones del Técnico Local (Opcional)
-                </label>
-                <textarea
-                  placeholder="Ej: Análisis específico para reparto a domicilio, viabilidad de asociarse a cooperativa local, o disponibilidad de local en propiedad en el núcleo..."
-                  value={userQuestion}
-                  onChange={(e) => setUserQuestion(e.target.value)}
-                  className="w-full text-xs p-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 h-22 resize-none font-sans shadow-3xs"
-                  id="consultant-question-box"
-                />
-              </div>
-
-              {/* Error messages if any */}
-              {errorMsg && (
-                <div className="p-3 bg-red-50 text-red-800 border border-red-200 rounded-lg text-xs flex items-start gap-2">
-                  <AlertCircle className="h-4 w-4 shrink-0 mt-0.5 text-red-600" />
-                  <span className="leading-snug">{errorMsg}</span>
-                </div>
-              )}
-
-              {/* CTA button */}
-              <button
-                onClick={handleConsult}
-                disabled={isLoading}
-                className="w-full py-3 bg-indigo-600 hover:bg-slate-900 disabled:bg-slate-205 text-white font-extrabold text-xs rounded-xl shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer font-sans uppercase tracking-wider hover:scale-[1.005] active:scale-[0.995]"
-                id="generate-consultant-btn"
-              >
-                <FileText className="h-4 w-4 text-indigo-200" />
-                Expedir Dictamen de Idoneidad y Diagnósticos del Municipio
-              </button>
-            </div>
-          )}
         </div>
       </div>
     </div>

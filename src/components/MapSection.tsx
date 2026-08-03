@@ -116,12 +116,13 @@ export const MapSection: React.FC<MapSectionProps> = ({
     
     mapRef.current = map;
     
-    // Use CartoDB Dark Matter tiles exactly as in the requested system screenshot
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      maxZoom: 20
+    // Use CartoDB Voyager / Light basemap
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+      maxZoom: 20,
+      subdomains: 'abcd'
     }).addTo(map);
 
-    // Subtle dark vector boundary outlines
+    // Subtle vector boundary outlines
     const boundaryGroup = L.featureGroup().addTo(map);
     polygonsGroupRef.current = boundaryGroup;
 
@@ -155,9 +156,9 @@ export const MapSection: React.FC<MapSectionProps> = ({
         const isSelected = selectedProvince === name;
 
         return {
-          fillColor: isSelected ? "#f97316" : "transparent",
-          fillOpacity: isSelected ? 0.08 : 0,
-          color: isSelected ? "#f97316" : "#334155",
+          fillColor: isSelected ? "#8c1d40" : "#94a3b8",
+          fillOpacity: isSelected ? 0.15 : 0.04,
+          color: isSelected ? "#8c1d40" : "#64748b",
           weight: isSelected ? 2.5 : 1.2,
           dashArray: isSelected ? "" : "3, 4"
         };
@@ -212,41 +213,38 @@ export const MapSection: React.FC<MapSectionProps> = ({
       }
     });
 
-    // Render precise dark-mode floating pill markers for each province centered on their geographic centroid
+    // Render precise light-mode floating pill markers for each province
     PROVINCES_DATA.forEach(p => {
       const isSelected = selectedProvince === p.name;
-      
-      // Use the mathematically calculated centroid of the province boundary
       const coord = provinceCentroids[p.name] || [p.lat, p.lng];
 
-      // Color coding for severity badges according to the screenshot rules:
-      // León (2.8%) is dark grey, Zamora (14.1%) is amber, Soria (63.9%) is bright red, others are deep red/crimson
-      let badgeClass = "bg-[#8c1d40]/90 border-[#8c1d40] text-red-100 shadow-[0_0_8px_rgba(140,29,64,0.4)]";
+      // Severity badge styling
+      let badgeClass = "bg-[#8c1d40] text-white border-[#8c1d40]";
       if (p.id === "Leon") {
-        badgeClass = "bg-slate-800/90 border-slate-700 text-slate-300";
+        badgeClass = "bg-slate-200 border-slate-300 text-slate-700";
       } else if (p.id === "Zamora") {
-        badgeClass = "bg-amber-950/90 border-amber-800 text-amber-200 shadow-[0_0_8px_rgba(146,64,14,0.3)]";
+        badgeClass = "bg-amber-100 border-amber-300 text-amber-800";
       } else if (p.id === "Soria") {
-        badgeClass = "bg-[#a31d44] border-red-500 text-white shadow-[0_0_12px_rgba(239,68,68,0.5)]";
+        badgeClass = "bg-rose-700 border-rose-800 text-white font-bold";
       }
 
       // Selected card styling
       const activeBorderClass = isSelected
-        ? "border-amber-500 ring-2 ring-amber-500/30"
-        : "border-[#1e293b]/80 bg-[#070b13]/95 hover:border-slate-700";
+        ? "border-[#8c1d40] bg-white ring-2 ring-[#8c1d40]/30 shadow-lg scale-105"
+        : "border-slate-200 bg-white/95 hover:border-slate-400 hover:shadow-md";
 
-      const activeTextClass = isSelected ? "text-amber-400 font-bold" : "text-slate-300 font-bold";
+      const activeTextClass = isSelected ? "text-[#8c1d40] font-black" : "text-slate-800 font-bold";
 
       const htmlContent = `
         <div class="flex flex-col items-center justify-end w-[100px] h-[50px] relative">
           <!-- Main pill container -->
-          <div class="px-2.5 py-1.5 rounded-lg border text-center flex flex-col items-center gap-0.5 min-w-[78px] shadow-md transition-all ${activeBorderClass} mb-1.5">
+          <div class="px-2.5 py-1.5 rounded-lg border text-center flex flex-col items-center gap-0.5 min-w-[78px] shadow-sm transition-all ${activeBorderClass} mb-1.5">
             <div class="text-[9px] uppercase tracking-wider ${activeTextClass} font-sans leading-none">${p.name}</div>
-            <div class="text-[10px] font-mono px-2 py-0.5 rounded-md border font-extrabold leading-none ${badgeClass} mt-1">${p.severity}</div>
+            <div class="text-[10px] font-mono px-2 py-0.5 rounded-md border font-bold leading-none ${badgeClass} mt-1">${p.severity}</div>
           </div>
           <!-- Anchor point circle -->
           <div class="absolute bottom-0 flex items-center justify-center h-2 w-2">
-            <div class="w-1.5 h-1.5 rounded-full ${isSelected ? "bg-amber-500" : "bg-slate-400"} relative z-10"></div>
+            <div class="w-1.5 h-1.5 rounded-full ${isSelected ? "bg-[#8c1d40]" : "bg-slate-600"} relative z-10"></div>
           </div>
         </div>
       `;
@@ -264,7 +262,6 @@ export const MapSection: React.FC<MapSectionProps> = ({
         onSelectProvince(isSelected ? null : p.name);
       });
 
-      // Show native rich Leaflet tooltip on hover
       marker.bindTooltip(`
         <div style="font-family: system-ui, sans-serif; padding: 4px 6px; font-size: 11px; line-height: 1.3; color: #1e293b;">
           <strong style="font-weight: 800; font-size: 12px; display: block; border-bottom: 1px solid #e2e8f0; padding-bottom: 2px; margin-bottom: 3px;">
@@ -283,33 +280,33 @@ export const MapSection: React.FC<MapSectionProps> = ({
   }, [selectedProvince, onSelectProvince]);
 
   return (
-    <div className="bg-[#121212] p-5 rounded-2xl border border-zinc-800 shadow-xl flex flex-col items-center font-sans text-white w-full select-none" id="leaflet-map-section">
+    <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center font-sans text-slate-800 w-full select-none" id="leaflet-map-section">
       
       {/* Outer Card Header matching scientific dashboard style */}
       <div className="w-full flex justify-between items-center mb-3 shrink-0">
         <div>
-          <div className="text-[10px] uppercase tracking-widest text-slate-400 font-mono font-bold">Filtro métrico activo:</div>
-          <h3 className="font-bold text-white text-xs flex items-center gap-2 mt-0.5">
-            <span className="w-2 h-2 rounded-full bg-amber-500"></span>
+          <div className="text-[10px] uppercase tracking-widest text-slate-500 font-mono font-bold">Filtro métrico activo:</div>
+          <h3 className="font-bold text-slate-800 text-xs flex items-center gap-2 mt-0.5">
+            <span className="w-2 h-2 rounded-full bg-[#8c1d40]"></span>
             % Atomización Crítica (&lt;100 hab)
           </h3>
         </div>
       </div>
 
       {/* Main Map Box container */}
-      <div className="relative w-full aspect-[4/3] min-h-[320px] bg-[#070b12] border border-zinc-800 rounded-2xl p-1 overflow-hidden shadow-xl">
+      <div className="relative w-full aspect-[4/3] min-h-[320px] bg-slate-100 border border-slate-200 rounded-2xl p-1 overflow-hidden shadow-inner">
         
         {/* Top Left Title Overlay */}
-        <div className="absolute top-4 left-4 z-40 pointer-events-none select-none">
-          <div className="text-[11px] font-bold tracking-wider text-zinc-200 font-sans">MAPA PROVINCIAL DE CASTILLA Y LEÓN</div>
-          <div className="text-[9px] font-sans text-zinc-400">Datos Abiertos JCyL</div>
+        <div className="absolute top-4 left-4 z-40 pointer-events-none select-none bg-white/90 backdrop-blur-xs px-2.5 py-1 rounded-lg border border-slate-200 shadow-xs">
+          <div className="text-[11px] font-bold tracking-wider text-slate-800 font-sans">MAPA PROVINCIAL DE CASTILLA Y LEÓN</div>
+          <div className="text-[9px] font-sans text-slate-500">Datos Abiertos JCyL</div>
         </div>
 
         {/* Top Right Selected Focus Box */}
         <div className="absolute top-4 right-4 z-40 pointer-events-none select-none">
-          <div className="flex items-center gap-1.5 px-3 py-1 bg-zinc-950/90 border border-zinc-800 rounded-full text-[10px] font-bold text-zinc-300 shadow-md">
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-            Provincia: <span className="text-white font-bold">{selectedProvince || "Todas"}</span>
+          <div className="flex items-center gap-1.5 px-3 py-1 bg-white/95 border border-slate-200 rounded-full text-[10px] font-bold text-slate-700 shadow-xs">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#8c1d40]"></span>
+            Provincia: <span className="text-[#8c1d40] font-bold">{selectedProvince || "Todas"}</span>
           </div>
         </div>
 
@@ -324,51 +321,51 @@ export const MapSection: React.FC<MapSectionProps> = ({
         <div className="absolute bottom-4 right-4 z-40">
           <button
             onClick={() => onSelectProvince(null)}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-zinc-900/95 hover:bg-zinc-800 border border-zinc-800 hover:border-zinc-700 rounded-lg text-[10px] font-bold text-zinc-300 shadow-lg cursor-pointer transition active:scale-[0.98]"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-slate-50 border border-slate-200 rounded-lg text-[10px] font-bold text-slate-700 shadow-md cursor-pointer transition active:scale-[0.98]"
             title="Resetear filtros de provincia"
           >
-            <Compass className="w-3.5 h-3.5 text-amber-500" />
+            <Compass className="w-3.5 h-3.5 text-[#8c1d40]" />
             Vista General
           </button>
         </div>
       </div>
 
       {/* Grid footer scale graphics */}
-      <div className="w-full flex justify-between items-center mt-2.5 px-1 select-none pointer-events-none text-[8px] font-mono text-zinc-500">
+      <div className="w-full flex justify-between items-center mt-2.5 px-1 select-none pointer-events-none text-[8px] font-mono text-slate-500">
         <div className="flex items-center gap-1">
-          <div className="w-10 h-1 border-b border-r border-l border-zinc-700"></div>
+          <div className="w-10 h-1 border-b border-r border-l border-slate-300"></div>
           <span>Escala: 0 40 80 km</span>
         </div>
       </div>
 
       {/* Legend Area */}
-      <div className="w-full mt-4 pt-3.5 border-t border-zinc-800/80">
+      <div className="w-full mt-4 pt-3.5 border-t border-slate-200">
         <div className="space-y-2">
-          <div className="text-[9px] font-bold text-zinc-400 uppercase tracking-wider text-left font-sans">
+          <div className="text-[9px] font-bold text-slate-500 uppercase tracking-wider text-left font-sans">
             Nivel de Severidad Territorial (Atomización %):
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[9px] text-zinc-300">
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-zinc-950/80 rounded-lg border border-zinc-800/60 justify-start">
-              <span className="w-2.5 h-2.5 rounded-full bg-slate-600"></span>
-              <span className="font-bold text-zinc-400">Moderado</span>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[9px] text-slate-700">
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 rounded-lg border border-slate-200 justify-start">
+              <span className="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
+              <span className="font-bold text-slate-600">Moderado</span>
             </div>
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-zinc-950/80 rounded-lg border border-zinc-800/60 justify-start">
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-amber-50 rounded-lg border border-amber-200 justify-start">
               <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
-              <span className="font-bold text-amber-500">Alto / Alerta</span>
+              <span className="font-bold text-amber-800">Alto / Alerta</span>
             </div>
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-zinc-950/80 rounded-lg border border-zinc-800/60 justify-start">
-              <span className="w-2.5 h-2.5 rounded-full bg-orange-600"></span>
-              <span className="font-bold text-orange-500">Crítico</span>
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-rose-50 rounded-lg border border-rose-200 justify-start">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#8c1d40]"></span>
+              <span className="font-bold text-[#8c1d40]">Crítico</span>
             </div>
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-zinc-950/80 rounded-lg border border-zinc-800/60 justify-start">
-              <span className="w-2.5 h-2.5 rounded-full bg-rose-600"></span>
-              <span className="font-bold text-rose-500">Extremo</span>
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-rose-100 rounded-lg border border-rose-300 justify-start">
+              <span className="w-2.5 h-2.5 rounded-full bg-rose-700"></span>
+              <span className="font-bold text-rose-800">Extremo</span>
             </div>
           </div>
         </div>
       </div>
 
-      <p className="text-[10px] text-zinc-400 mt-4 text-center leading-relaxed font-sans">
+      <p className="text-[10px] text-slate-500 mt-4 text-center leading-relaxed font-sans">
         Seleccione cualquier provincia en el mapa para filtrar los datos municipales correspondientes.
       </p>
     </div>
