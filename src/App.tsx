@@ -282,11 +282,12 @@ export default function App() {
             </p>
           </div>
 
-          <div className="bg-slate-950/65 border border-slate-800 p-4 rounded-xl max-w-md backdrop-blur-xs">
-            <h2 className="text-xs font-extrabold text-white uppercase tracking-wider mb-1">
+          <div className="bg-slate-950/80 border border-slate-700/80 p-4 rounded-xl max-w-md backdrop-blur-sm shadow-lg">
+            <h2 className="text-xs font-extrabold text-amber-300 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>
               Plataforma de Viabilidad Territorial CyL
             </h2>
-            <p className="text-[11px] text-slate-350 leading-relaxed">
+            <p className="text-xs text-slate-100 font-medium leading-relaxed">
               Herramienta técnica para Agentes de Desarrollo Local y Emprendedores. Detectamos prioridades insatisfechas emparejando censo de población, velocidad de telecomunicaciones y comercios existentes.
             </p>
           </div>
